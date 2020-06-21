@@ -26,19 +26,8 @@ class BungeeDiscordChat : Plugin(), Listener{
     var discord = DiscordBot()
 
     override fun onEnable() {
-        /**
-        for (command in arrayOf(
-                "tell", "msg", "message", "m", "w", "t")) {
-            proxy.pluginManager.registerCommand(
-                    this, TellCommand(this, command))
-        }
-        for (command in arrayOf("reply", "r")) {
-            proxy.pluginManager.registerCommand(
-                    this, ReplyCommand(this, command))
-        }
-        **/
         loadConfig()
-
+        logger.info("Config Loaded")
         proxy.pluginManager.registerListener(this, this)
     }
 
@@ -53,9 +42,11 @@ class BungeeDiscordChat : Plugin(), Listener{
             discord.commandlogChannelID = config.getLong("Discord.CommandlogChannel")
             discord.systemChannelID = config.getLong("Discord.SystemChannel")
 
+            discord.plugin = this
+            discord.setup()
         } catch (e: NullPointerException) {
             e.printStackTrace()
-            discord.system("[Error]${e.localizedMessage}")
+            logger.info("[Error]${e.localizedMessage}")
         }
     }
 
