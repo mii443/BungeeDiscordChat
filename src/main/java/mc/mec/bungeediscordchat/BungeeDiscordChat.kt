@@ -7,6 +7,9 @@ import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.event.ChatEvent
+import net.md_5.bungee.api.event.PlayerDisconnectEvent
+import net.md_5.bungee.api.event.PostLoginEvent
+import net.md_5.bungee.api.event.ServerConnectedEvent
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.api.plugin.Plugin
 import net.md_5.bungee.event.EventHandler
@@ -23,7 +26,7 @@ class BungeeDiscordChat : Plugin(), Listener{
     var discord = DiscordBot()
 
     override fun onEnable() {
-        /*
+        /**
         for (command in arrayOf(
                 "tell", "msg", "message", "m", "w", "t")) {
             proxy.pluginManager.registerCommand(
@@ -33,9 +36,27 @@ class BungeeDiscordChat : Plugin(), Listener{
             proxy.pluginManager.registerCommand(
                     this, ReplyCommand(this, command))
         }
-        */
+        **/
+        loadConfig()
 
         proxy.pluginManager.registerListener(this, this)
+    }
+
+    fun loadConfig(){
+        val config = ConfigFile(this).getConfig()
+        try {
+            this.lunachat = config?.getBoolean("lunachat")!!
+
+            discord.token = config.getString("Discord.Token")
+            discord.guildID = config.getLong("Discord.Guild")
+            discord.chatChannelID = config.getLong("Discord.ChatChannel")
+            discord.commandlogChannelID = config.getLong("Discord.CommandlogChannel")
+            discord.systemChannelID = config.getLong("Discord.SystemChannel")
+
+        } catch (e: NullPointerException) {
+            e.printStackTrace()
+            discord.system("[Error]${e.localizedMessage}")
+        }
     }
 
     override fun onDisable() {
@@ -56,9 +77,36 @@ class BungeeDiscordChat : Plugin(), Listener{
                 sendMessage(player.uniqueId, chatMessage)
             }
         }
-        if (!e.isCommand || !e.isProxyCommand) {
+        if (e.isCommand || e.isProxyCommand) {
+            discord.cmdlog("[CMD-LOG] <${e.sender}> $message")
+        }else {
             discord.chat(chatMessage)
         }
+    }
+
+    @EventHandler
+    fun onLogin(e: PostLoginEvent){
+        val player = e.player
+        val name = player.name
+        ProxyServer.getInstance().broadcast("§e§l[ログイン] §f§l${name}§r§fさんがサーバーに参加しました。")
+        discord.chat(":bangbang: **${player}さんがログインしました**")
+    }
+
+    @EventHandler
+    fun onLogout(e: PlayerDisconnectEvent) {
+        val player = e.player
+        val name = player.name
+        ProxyServer.getInstance().broadcast("§e§l[ログアウト] §f§l${name}§r§fさんがサーバーから退出しました。")
+        discord.chat(":x: **${name}さんがログアウトしました**")
+    }
+
+    @EventHandler
+    fun onMove(e: ServerConnectedEvent){
+        val player = e.player
+        val name = player.name
+        val server = e.server.info.name
+        ProxyServer.getInstance().broadcast("§e§l[ムーブメント] §f§l${name}§r§fさんが${server}サーバーに移動しました。")
+        discord.chat(":door: **${name}さんが${server}サーバーに移動しました。**")
     }
 
     fun sendMessage(uuid: UUID ,text:String){
@@ -68,6 +116,4 @@ class BungeeDiscordChat : Plugin(), Listener{
     private fun removeColorCode(msg: String?): String? {
         return ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', msg))
     }
-
-
 }

@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import javax.security.auth.login.LoginException
 
-class DiscordBot() : ListenerAdapter() {
+class DiscordBot : ListenerAdapter() {
     var plugin: BungeeDiscordChat? = null
 
     lateinit var jda: JDA
@@ -21,9 +21,11 @@ class DiscordBot() : ListenerAdapter() {
     var guildID:Long = 0
     var chatChannelID:Long = 0
     var systemChannelID:Long = 0
+    var commandlogChannelID:Long = 0
 
     var chatChannel: TextChannel? = null
     var systemChannel:TextChannel? = null
+    var commandlogChannel: TextChannel? = null
 
 
     //      チャットチャンネル出力
@@ -36,6 +38,10 @@ class DiscordBot() : ListenerAdapter() {
     //      システム出力
     fun system(text:String){
         systemChannel?.sendMessage(text)?.queue()
+    }
+    //      コマンドログ出力
+    fun cmdlog(text: String){
+        commandlogChannel?.sendMessage(text)?.queue()
     }
 
     fun shutdown(){
@@ -58,6 +64,7 @@ class DiscordBot() : ListenerAdapter() {
             guild = jda.getGuildById(this.guildID);
             chatChannel = guild?.getTextChannelById(this.chatChannelID)
             systemChannel = guild?.getTextChannelById(this.systemChannelID)
+            commandlogChannel = guild?.getTextChannelById(this.commandlogChannelID)
 
         } catch (e: LoginException) {
             e.printStackTrace()
