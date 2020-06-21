@@ -26,6 +26,7 @@ class BungeeDiscordChat : Plugin(), Listener{
     var discord = DiscordBot()
 
     override fun onEnable() {
+        /**
         for (command in arrayOf(
                 "tell", "msg", "message", "m", "w", "t")) {
             proxy.pluginManager.registerCommand(
@@ -35,6 +36,7 @@ class BungeeDiscordChat : Plugin(), Listener{
             proxy.pluginManager.registerCommand(
                     this, ReplyCommand(this, command))
         }
+        **/
 
         proxy.pluginManager.registerListener(this, this)
     }
