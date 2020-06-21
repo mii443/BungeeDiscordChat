@@ -17,10 +17,8 @@ import java.util.*
 
 
 class BungeeDiscordChat : Plugin(), Listener{
-    companion object{
-        private const val prefix = "§b§l[BungeeDiscordChat]§r"
-    }
 
+    val prefix = "§b§l[BDC]§r"
     var dic = HashMap<String?, String?> ()
     var lunachat:Boolean = false
     var discord = DiscordBot()

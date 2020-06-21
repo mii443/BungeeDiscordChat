@@ -3,12 +3,15 @@ package mc.mec.bungeediscordchat
 import net.dv8tion.jda.api.AccountType
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
+import net.dv8tion.jda.api.entities.ChannelType
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
+import net.md_5.bungee.api.ProxyServer
 import javax.security.auth.login.LoginException
+
 
 class DiscordBot : ListenerAdapter() {
     var plugin: BungeeDiscordChat? = null
@@ -87,8 +90,16 @@ class DiscordBot : ListenerAdapter() {
         plugin?.logger?.info("Discord bot ready")
     }
 
-    override fun onMessageReceived(event: MessageReceivedEvent) {
-        val msg = event.message
-
+    override fun onMessageReceived(e: MessageReceivedEvent) {
+        if(e.author.id == jda.selfUser.id){
+            return
+        }
+        if(e.channelType != ChannelType.TEXT){
+            return
+        }
+        if(e.textChannel.idLong != chatChannel?.idLong) {
+            return
+        }
+        ProxyServer.getInstance().broadcast("${plugin?.prefix} ${e.author.name}  ${e.message.contentRaw}")
     }
 }
