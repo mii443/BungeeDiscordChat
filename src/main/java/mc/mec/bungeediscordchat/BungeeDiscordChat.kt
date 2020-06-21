@@ -1,7 +1,5 @@
 package mc.mec.bungeediscordchat
 
-import mc.mec.bungeediscordchat.commands.ReplyCommand
-import mc.mec.bungeediscordchat.commands.TellCommand
 import mc.mec.bungeediscordchat.japanize.JapanizeType
 import mc.mec.bungeediscordchat.japanize.Japanizer
 import net.md_5.bungee.api.ChatColor
@@ -12,7 +10,6 @@ import net.md_5.bungee.api.event.ChatEvent
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.api.plugin.Plugin
 import net.md_5.bungee.event.EventHandler
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -26,7 +23,7 @@ class BungeeDiscordChat : Plugin(), Listener{
     var discord = DiscordBot()
 
     override fun onEnable() {
-        /**
+        /*
         for (command in arrayOf(
                 "tell", "msg", "message", "m", "w", "t")) {
             proxy.pluginManager.registerCommand(
@@ -36,7 +33,7 @@ class BungeeDiscordChat : Plugin(), Listener{
             proxy.pluginManager.registerCommand(
                     this, ReplyCommand(this, command))
         }
-        **/
+        */
 
         proxy.pluginManager.registerListener(this, this)
     }
