@@ -29,6 +29,8 @@ class BungeeDiscordChat : Plugin(), Listener{
         loadConfig()
         logger.info("Config Loaded")
         proxy.pluginManager.registerListener(this, this)
+        discord.system(":ballot_box_with_check: Bot起動")
+        discord.chat(":ballot_box_with_check: **サーバーが起動しました**")
     }
 
     fun loadConfig(){
@@ -51,6 +53,9 @@ class BungeeDiscordChat : Plugin(), Listener{
     }
 
     override fun onDisable() {
+        discord.chat(":no_entry:  **サーバーが停止しました**")
+        discord.system(":no_entry:  Bot停止")
+        discord.shutdown()
     }
 
     @EventHandler
@@ -62,7 +67,7 @@ class BungeeDiscordChat : Plugin(), Listener{
             val jmsg = Japanizer.japanize(message, JapanizeType.GOOGLE_IME, dic)
             if (jmsg != "") message += "($jmsg)"
         }
-        val chatMessage = "${e.sender}@${p.server.info.name}>${message}"
+        val chatMessage = "<${e.sender}@${p.server.info.name}> $message"
         for (player in ProxyServer.getInstance().players) {
             if (player.server.info.name != p.server.info.name) {
                 sendMessage(player.uniqueId, chatMessage)
