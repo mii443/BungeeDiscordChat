@@ -13,6 +13,7 @@ import net.md_5.bungee.api.event.ServerConnectedEvent
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.api.plugin.Plugin
 import net.md_5.bungee.event.EventHandler
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -59,6 +60,8 @@ class BungeeDiscordChat : Plugin(), Listener{
     @EventHandler
     fun onChat(e: ChatEvent) {
         val p = e.sender
+        val now = Date()
+        val format = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
         if (p !is ProxiedPlayer) return
         var message = removeColorCode(e.message)
         if (lunachat) {
@@ -72,7 +75,7 @@ class BungeeDiscordChat : Plugin(), Listener{
             }
         }
         if (e.isCommand || e.isProxyCommand) {
-            discord.cmdlog("[CMD-LOG] <${e.sender}> $message")
+            discord.cmdlog("[CMD-LOG] <${e.sender}> ${e.message} (${format.format(now)})")
         }else {
             discord.chat(chatMessage)
         }
