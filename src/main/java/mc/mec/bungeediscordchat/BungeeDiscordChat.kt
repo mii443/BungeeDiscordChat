@@ -64,20 +64,23 @@ class BungeeDiscordChat : Plugin(), Listener{
         val format = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
         if (p !is ProxiedPlayer) return
         var message = removeColorCode(e.message)
+        var dmessage = removeColorCode(e.message)
         if (lunachat) {
             val jmsg = Japanizer.japanize(message, JapanizeType.GOOGLE_IME, dic)
-            if (jmsg != "") message += "(§d$jmsg)"
+            val djmsg = Japanizer.japanize(dmessage, JapanizeType.GOOGLE_IME, dic)
+            if (jmsg != "") message += " §6($jmsg)"
+            if (djmsg != "") dmessage += " ($jmsg)"
         }
         val chatMessage = "§d<${e.sender}@${p.server.info.name}> §r$message"
-        val dchatMessage = "<${e.sender}@${p.server.info.name}> $message"
-        for (player in ProxyServer.getInstance().players) {
-            if (player.server.info.name != p.server.info.name) {
-                sendMessage(player.uniqueId, chatMessage)
-            }
-        }
+        val dchatMessage = "<${e.sender}@${p.server.info.name}> $dmessage"
         if (e.isCommand || e.isProxyCommand) {
             discord.cmdlog("[CMD-LOG] <${e.sender}@${p.server.info.name}> ${e.message} (${format.format(now)})")
         }else {
+            for (player in ProxyServer.getInstance().players) {
+                if (player.server.info.name != p.server.info.name) {
+                    sendMessage(player.uniqueId, chatMessage)
+                }
+            }
             discord.chat(dchatMessage)
         }
     }
