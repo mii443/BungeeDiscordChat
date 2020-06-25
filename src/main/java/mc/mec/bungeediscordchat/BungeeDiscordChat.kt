@@ -66,9 +66,10 @@ class BungeeDiscordChat : Plugin(), Listener{
         var message = removeColorCode(e.message)
         if (lunachat) {
             val jmsg = Japanizer.japanize(message, JapanizeType.GOOGLE_IME, dic)
-            if (jmsg != "") message += "($jmsg)"
+            if (jmsg != "") message += "(§d$jmsg)"
         }
-        val chatMessage = "§d<${e.sender}@${p.server.info.name}> $message"
+        val chatMessage = "§d<${e.sender}@${p.server.info.name}> §r$message"
+        val dchatMessage = "<${e.sender}@${p.server.info.name}> $message"
         for (player in ProxyServer.getInstance().players) {
             if (player.server.info.name != p.server.info.name) {
                 sendMessage(player.uniqueId, chatMessage)
@@ -77,7 +78,7 @@ class BungeeDiscordChat : Plugin(), Listener{
         if (e.isCommand || e.isProxyCommand) {
             discord.cmdlog("[CMD-LOG] <${e.sender}@${p.server.info.name}> ${e.message} (${format.format(now)})")
         }else {
-            discord.chat(chatMessage)
+            discord.chat(dchatMessage)
         }
     }
 
