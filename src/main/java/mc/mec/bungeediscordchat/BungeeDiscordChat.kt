@@ -19,7 +19,7 @@ import java.util.*
 
 class BungeeDiscordChat : Plugin(), Listener{
 
-    val prefix = "§b§l[BDC]§r"
+    val prefix = "§b§l[BDiscord]§r"
     var dic = HashMap<String?, String?> ()
     var lunachat:Boolean = false
     var discord = DiscordBot()
@@ -68,7 +68,7 @@ class BungeeDiscordChat : Plugin(), Listener{
             val jmsg = Japanizer.japanize(message, JapanizeType.GOOGLE_IME, dic)
             if (jmsg != "") message += "($jmsg)"
         }
-        val chatMessage = "<${e.sender}@${p.server.info.name}> $message"
+        val chatMessage = "§d<${e.sender}@${p.server.info.name}> $message"
         for (player in ProxyServer.getInstance().players) {
             if (player.server.info.name != p.server.info.name) {
                 sendMessage(player.uniqueId, chatMessage)
