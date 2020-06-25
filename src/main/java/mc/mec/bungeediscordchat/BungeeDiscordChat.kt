@@ -75,7 +75,7 @@ class BungeeDiscordChat : Plugin(), Listener{
             }
         }
         if (e.isCommand || e.isProxyCommand) {
-            discord.cmdlog("[CMD-LOG] <${e.sender}> ${e.message} (${format.format(now)})")
+            discord.cmdlog("[CMD-LOG] <${e.sender}@${p.server.info.name}> ${e.message} (${format.format(now)})")
         }else {
             discord.chat(chatMessage)
         }
