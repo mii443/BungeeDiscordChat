@@ -1,5 +1,7 @@
 package mc.mec.bungeediscordchat
 
+import mc.mec.bungeediscordchat.commands.PrivateMessage.ReplyCommand
+import mc.mec.bungeediscordchat.commands.PrivateMessage.TellCommand
 import mc.mec.bungeediscordchat.japanize.JapanizeType
 import mc.mec.bungeediscordchat.japanize.Japanizer
 import net.md_5.bungee.api.ChatColor
