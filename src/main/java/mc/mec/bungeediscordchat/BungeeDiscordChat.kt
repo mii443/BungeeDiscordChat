@@ -1,6 +1,5 @@
 package mc.mec.bungeediscordchat
 
-import mc.mec.bungeediscordchat.commands.PrivateMessage.ReplyCommand
 import mc.mec.bungeediscordchat.commands.PrivateMessage.TellCommand
 import mc.mec.bungeediscordchat.japanize.JapanizeType
 import mc.mec.bungeediscordchat.japanize.Japanizer
@@ -26,10 +25,17 @@ class BungeeDiscordChat : Plugin(), Listener{
     var lunachat:Boolean = false
     var discord = DiscordBot()
 
+    companion object {
+        lateinit var instance: Plugin
+            private set
+    }
+
     override fun onEnable() {
         loadConfig()
         logger.info("Config Loaded")
         proxy.pluginManager.registerListener(this, this)
+        proxy.pluginManager.registerCommand(this, TellCommand)
+        instance = this
         discord.system(":ballot_box_with_check: Bot起動")
         discord.chat(":ballot_box_with_check: **サーバーが起動しました**")
     }

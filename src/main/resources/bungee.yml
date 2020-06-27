@@ -1,3 +1,5 @@
 name: BungeeDiscordChat
 version: ${project.version}
 main: mc.mec.bungeediscordchat.BungeeDiscordChat
+commands:
+  btell:
