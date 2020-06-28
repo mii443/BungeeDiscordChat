@@ -26,10 +26,28 @@ class BungeeDiscordChat : Plugin(), Listener{
     var lunachat:Boolean = false
     var discord = DiscordBot()
 
+    companion object {
+        lateinit var instance: Plugin
+            private set
+    }
+
     override fun onEnable() {
+        //tell commandを置き換える
+        for (command in arrayOf(
+                "tell", "msg", "message", "m", "w", "t")) {
+            proxy.pluginManager.registerCommand(
+                    this, TellCommand(this, command))
+        }
+        //reply commandを置き換える
+        for (command in arrayOf("reply", "r")) {
+            proxy.pluginManager.registerCommand(
+                    this, ReplyCommand(this, command))
+        }
+
         loadConfig()
         logger.info("Config Loaded")
         proxy.pluginManager.registerListener(this, this)
+        instance = this
         discord.system(":ballot_box_with_check: Bot起動")
         discord.chat(":ballot_box_with_check: **サーバーが起動しました**")
     }
